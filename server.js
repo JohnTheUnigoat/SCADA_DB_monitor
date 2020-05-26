@@ -9,7 +9,7 @@ var conn = mysql.createConnection({
 
 
 var scadaVarIds = [44, 45, 46];
-var initValuesCount = 5;
+var initVarValuesCount = 5;
 
 var initVarValuesSql = (() => {
     let res = ""
@@ -20,7 +20,7 @@ var initVarValuesSql = (() => {
             FROM trends_data
             WHERE ID = ${id}
             ORDER BY Timestamp DESC
-            LIMIT ${initValuesCount})
+            LIMIT ${initVarValuesCount})
             UNION`;
     });
 
@@ -29,3 +29,20 @@ var initVarValuesSql = (() => {
 
     return res;
 })();
+
+var scadaVarValues = [];
+
+var timeLimit = new Date(0);
+
+// Load initial variable values, save first time limit
+conn.query(initVarValuesSql, (err, res) => {
+    if (err) throw err;
+
+    res.forEach(record => {
+        scadaVarValues.push({id: record.ID, time: record.Timestamp, value: record.Value});
+    });
+
+    timeLimit = new Date(scadaVarValues[0].time.getTime() + 1000);
+    console.log(scadaVarValues);
+    console.log(timeLimit);
+});
