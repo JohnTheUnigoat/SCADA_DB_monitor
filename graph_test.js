@@ -16,5 +16,9 @@ app.use(express.static('./client'));
 // });
 
 setInterval(() => {
-    io.sockets.emit('asdf', 'hello');
+    io.sockets.emit('asdf', {
+        id: 44,
+        time: new Date(),
+        value: Math.random() * 100 
+    });
 }, 1000);
