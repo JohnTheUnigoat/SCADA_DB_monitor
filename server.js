@@ -4,45 +4,69 @@ var conn = mysql.createConnection({
     host: "localhost",
     database: "simplescadademo",
     user: "root",
-    password: ""
+    password: "",
+    dateStrings: true
 });
 
 
 var scadaVarIds = [44, 45, 46];
 var initVarValuesCount = 5;
 
-var initVarValuesSql = (() => {
+
+var initVarValuesSql = (function() {
     let res = ""
 
     scadaVarIds.forEach(id => {
-        res += `
-            (SELECT ID, Timestamp, Value
-            FROM trends_data
-            WHERE ID = ${id}
-            ORDER BY Timestamp DESC
-            LIMIT ${initVarValuesCount})
-            UNION`;
+        res += `(SELECT * FROM trends_data WHERE ID = ${id} ORDER BY Timestamp DESC LIMIT ${initVarValuesCount})
+        UNION`;
     });
 
     res = res.slice(0, res.lastIndexOf("UNION"));
-    res = `SELECT * FROM (${res}) AS u ORDER BY Timestamp`;
+    res = `SELECT * FROM (${res}) AS u ORDER BY Timestamp ASC`;
 
     return res;
 })();
 
-var scadaVarValues = [];
 
-var timeLimit = new Date(0);
+var scadaVarValues = (function() {
+    let res = {};
 
-// Load initial variable values, save first time limit
+    scadaVarIds.forEach(id => {
+        res[id] = {
+            lastTimestamp: new Date(0),
+            records: []
+        };
+    });
+
+    return res;
+})();
+
+
+// Load initial variable values, send first message
 conn.query(initVarValuesSql, (err, res) => {
     if (err) throw err;
 
-    res.forEach(record => {
-        scadaVarValues.push({id: record.ID, time: record.Timestamp, value: record.Value});
+    saveData(res);
+});
+
+function saveData(queryRes) {
+    if (queryRes.length == 0) return;
+
+    queryRes.forEach(dbRecord => {
+        scadaVarValues[dbRecord.ID].records.push({
+            time: dbRecord.Timestamp,
+            value: dbRecord.Value
+        });
     });
 
-    timeLimit = new Date(scadaVarValues[0].time.getTime() + 1000);
+    for (const id in scadaVarValues) {
+        let varData = scadaVarValues[id];
+        varData.lastTimestamp = varData.records[varData.records.length - 1].time;
+        console.log(id);
+        varData.records.forEach(record => {
+            console.log(record);
+        });
+    }
+
     console.log(scadaVarValues);
-    console.log(timeLimit);
-});
+}
