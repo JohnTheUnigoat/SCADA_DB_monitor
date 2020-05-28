@@ -10,8 +10,13 @@
   "author": "Ivan Hudzinskyi",
   "license": "ISC",
   "dependencies": {
+    "chart.js": "^2.9.3",
     "express": "^4.17.1",
     "mysql": "^2.18.1",
     "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
   }
 }

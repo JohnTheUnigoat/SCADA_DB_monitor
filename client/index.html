@@ -4,18 +4,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="/socket.io/socket.io.js"></script>
-  <title>Document</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
+  <!-- <script src=""></script> -->
+  <title>Graphs</title>
   <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
+
+  <select id="div-select" name="form_select">
+    <option value="0" onclick="hideAllCanvases()" selected>No</option>
+    <option value="44" onClick="switchToCanvas(this)">Chart1</option>
+    <option value="45" onClick="switchToCanvas(this)">Chart2</option>
+    <option value="46" onClick="switchToCanvas(this)">Chart3</option>
+  </select>
 
   <canvas id="44"></canvas>
   <canvas id="45"></canvas>
   <canvas id="46"></canvas>
 
-  <script src="websocketService.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
+  <!-- <script src="customFormat.js"></script> -->
   <script src="chartService.js"></script>
-  <script>scanCanvases();</script>
+  <script src="websocketService.js"></script>
+
 </body>
 </html>
