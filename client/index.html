@@ -9,17 +9,13 @@
 </head>
 <body>
 
-  <canvas id="Chart1"></canvas>
+  <canvas id="44"></canvas>
+  <canvas id="45"></canvas>
+  <canvas id="46"></canvas>
 
-  <script>
-    var socket = io();
-    
-    socket.on('asdf', (message) => {// add point to graph
-      if(message.id === 44)
-        addValue(message);
-    });
-  </script>
+  <script src="websocketService.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
   <script src="chartService.js"></script>
+  <script>scanCanvases();</script>
 </body>
 </html>
