@@ -61,16 +61,13 @@ function chartReport(report) {
 }
 
 function switchToCanvas(id) {
-    hideAllCanvases();
-    document.getElementById(id).style.display = 'block';
-}
-
-function hideAllCanvases() {
     let canvases = document.getElementsByTagName("canvas");
 
     for (let canvas of canvases) {
          canvas.style.display = 'none';
     }
+
+    document.getElementById(id).style.display = 'block';
 }
 
-hideAllCanvases();
+switchToCanvas(select.value);
