@@ -1,4 +1,19 @@
-var mysql = require("mysql");
+const mysql = require("mysql");
+
+const express = require('express');
+const socket = require('socket.io')
+
+const path = require('path');
+
+const app = express();
+
+const server = app.listen(3000);
+
+const io = socket(server);
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/test.html'));
+});
 
 var conn = mysql.createConnection({
     host: "localhost",
@@ -52,6 +67,7 @@ conn.query(initVarValuesSql, (err, res) => {
     if (err) throw err;
 
     currentReportTime = new Date(res[0].Timestamp);
+    currentReportTime.setSeconds(currentReportTime.getSeconds() + 5);
 
     saveData(res);
 
@@ -129,4 +145,6 @@ function sendReport() {
 
         report[id] = varReport;
     });
+
+    io.sockets.emit('report', report);
 }
