@@ -42,14 +42,19 @@ var scadaVarValues = (function() {
 })();
 
 
+var currentReportTime = new Date(0);
+
 // Load initial variable values, save latest timestamps
 conn.query(initVarValuesSql, (err, res) => {
     if (err) throw err;
+
+    currentReportTime = new Date(res[0].Timestamp);
 
     saveData(res);
 
     setInterval(() => {
         loadNewData();
+        sendReport();
     }, 1000);
 });
 
@@ -94,4 +99,38 @@ function saveData(queryRes) {
             console.log(record);
         });
     }
+}
+
+function sendReport() {
+    currentReportTime.setSeconds(currentReportTime.getSeconds() + 1);
+
+    let report = {};
+
+    console.log("Sending report:");
+
+    scadaVarIds.forEach(id => {
+        let varRecords = scadaVarValues[id].records;
+
+        if (varRecords.length == 0)
+            continue;
+
+        let varReport = [];
+
+        let i = 0;
+
+        for (i = 0; i < varRecords.length; i++) {
+            let record = varRecords[i];
+
+            if (new Date(record.time) > currentReportTime)
+                break;
+
+            varReport.push(record);
+        }
+
+        scadaVarValues[id].records = varRecords.slice(i);
+
+        console.log(`${id}: ${varReport.length} records`);
+
+        report[id] = varReport;
+    });
 }
