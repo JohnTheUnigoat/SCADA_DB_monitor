@@ -10,15 +10,18 @@ var conn = mysql.createConnection({
 
 
 var scadaVarIds = [44, 45, 46];
-var initVarValuesCount = 5;
+var initVarValuesCount = 30;
 
 
 var initVarValuesSql = (function() {
     let res = ""
 
     scadaVarIds.forEach(id => {
-        res += `(SELECT * FROM trends_data WHERE ID = ${id} ORDER BY Timestamp DESC LIMIT ${initVarValuesCount})
-        UNION`;
+        res += `(
+            SELECT *
+            FROM trends_data
+            WHERE ID = ${id} ORDER BY Timestamp DESC LIMIT ${initVarValuesCount}
+            ) UNION `;
     });
 
     res = res.slice(0, res.lastIndexOf("UNION"));
@@ -56,6 +59,7 @@ conn.query(initVarValuesSql, (err, res) => {
         loadNewData();
         sendReport();
     }, 1000);
+
 });
 
 
@@ -93,11 +97,6 @@ function saveData(queryRes) {
     for (const id in scadaVarValues) {
         let varData = scadaVarValues[id];
         varData.lastTimestamp = varData.records[varData.records.length - 1].time;
-
-        console.log(id);
-        varData.records.forEach(record => {
-            console.log(record);
-        });
     }
 }
 
@@ -105,14 +104,11 @@ function sendReport() {
     currentReportTime.setSeconds(currentReportTime.getSeconds() + 1);
 
     let report = {};
-
-    console.log("Sending report:");
-
     scadaVarIds.forEach(id => {
         let varRecords = scadaVarValues[id].records;
 
         if (varRecords.length == 0)
-            continue;
+            return;
 
         let varReport = [];
 
@@ -129,7 +125,7 @@ function sendReport() {
 
         scadaVarValues[id].records = varRecords.slice(i);
 
-        console.log(`${id}: ${varReport.length} records`);
+        console.log(`${id}: ${varReport.length} records sent\n`);
 
         report[id] = varReport;
     });
