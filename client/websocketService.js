@@ -1,5 +1,5 @@
 var socket = io();
     
-socket.on('asdf', (message) => {// add point to graph
-    addValue(message);
+socket.on('report', (report) => {// add point to graph
+    chartReport(report);
 });

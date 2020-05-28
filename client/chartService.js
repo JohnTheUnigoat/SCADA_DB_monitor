@@ -1,8 +1,13 @@
-var id_chartDict = {};
+var idChartData = {};
 
-var id_label = {44: "one", 45: "two", 46: "three"}
-function createCharts()// for all canvases
-{
+var select = document.getElementById("chart-select");
+
+select.addEventListener("change", () => {
+    switchToCanvas(select.value);
+});
+
+// create charts for each canvas
+(function() {
     let canvases = document.getElementsByTagName("canvas");
     for (let canvas of canvases) {
         let ctx = canvas.getContext('2d');
@@ -31,34 +36,41 @@ function createCharts()// for all canvases
             }
         });
 
-        newChart.data.datasets[0].label = id_label[canvas.id];
-        id_chartDict[canvas.id] = newChart;
+        idChartData[canvas.id] = {
+            chart: newChart,
+            data: newChart.data.datasets[0].data,
+            canvas: canvas
+        };
+    }
+})();
+
+function chartReport(report) {
+    for (const id in report) {
+        let varRecords = report[id];
+
+        let chartData = idChartData[id];
+
+        varRecords.forEach(record => {
+            let time = moment(record.time);
+            let value = record.value;
+            chartData.data.push({t: time, y: value});
+        })
+
+        chartData.chart.update();
     }
 }
-createCharts();
 
-function addValue(message)
-{
-    let id = message.id;
-    let xval = moment(message.time);
-    let yval = message.value;
-
-    id_chartDict[id].data.datasets[0].data.push({t: xval, y: yval});
-
-    id_chartDict[id].update();
-}
-
-function switchToCanvas(option)
-{
+function switchToCanvas(id) {
     hideAllCanvases();
-
-    let toShow = document.getElementById(option.value);
-    toShow.style.display = 'block';
+    document.getElementById(id).style.display = 'block';
 }
 
-function hideAllCanvases()
-{
-    let canvases = Array.prototype.slice.call(document.getElementsByTagName("canvas"));// turn to js array
-    canvases.forEach(element => element.style.display = 'none');
+function hideAllCanvases() {
+    let canvases = document.getElementsByTagName("canvas");
+
+    for (let canvas of canvases) {
+         canvas.style.display = 'none';
+    }
 }
+
 hideAllCanvases();
