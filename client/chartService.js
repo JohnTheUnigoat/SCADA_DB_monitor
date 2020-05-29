@@ -7,42 +7,58 @@ select.addEventListener("change", () => {
 });
 
 // create charts for each canvas
-let canvases = document.getElementsByTagName("canvas");
-for (let canvas of canvases) {
-    let ctx = canvas.getContext('2d');
-    let newChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            datasets: [{
-                lineTension: 0,
-                borderColor: 'rgb(255, 0, 0)',
-                data: []
-            }]
-        },
-        options: {
-            legend: {
-                display: false
-            },
-            tooltips: {
-                enabled: false
-            },
-            animation: false,
-            scales: {
-                xAxes: [{
-                    type: 'time',
-                }]
-            }
-        }
-    });
-
-    idChartData[canvas.id] = {
-        chart: newChart,
-        data: newChart.data.datasets[0].data,
-        canvas: canvas
-    };
+let options = {
+    legend: {
+        display: false
+    },
+    tooltips: {
+        enabled: false
+    },
+    animation: false,
+    scales: {
+        xAxes: [{
+            type: 'time',
+        }]
+    }
 }
+let canvasContainer = document.getElementById("container");
+let canvases = canvasContainer.children;
+for (const div of canvases) {
+    let flag = 0;
+    let staticChart;
+    let dynamicChart;
+    let indiv = div.children;
+    for(const canvas of indiv) {
+            let ctx = canvas.getContext('2d');
+            let newChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        lineTension: 0,
+                        borderColor: 'rgb(255, 0, 0)',
+                        data: []
+                    }]
+                },
+                options: options
+            });
+            if(flag === 0) {
+                dynamicChart = newChart;
+                flag = 1;
+            }
+            else {// flag === 1
+                staticChart = newChart;
+            } 
+        }
+        idChartData[div.id] = {
+            div: div,
+            staticChart: staticChart,
+            staticData: staticChart.data.datasets[0].data,
+            dynamicChart: dynamicChart,
+            dynamicData: dynamicChart.data.datasets[0].data
+        }
+    }
 
-function chartReport(report) {
+function chartReport(report) {// for dynamic chart only
     for (const id in report) {
         let varRecords = report[id];
 
@@ -51,21 +67,19 @@ function chartReport(report) {
         varRecords.forEach(record => {
             let time = moment(record.time);
             let value = record.value;
-            chartData.data.push({t: time, y: value});
+            chartData.dynamicData.push({t: time, y: value});
         })
 
-        chartData.chart.update();
+        chartData.dynamicChart.update();
     }
 }
 
 function switchToCanvas(id) {
-    let canvases = document.getElementsByTagName("canvas");
-
-    for (let canvas of canvases) {
-        canvas.style.display = 'none';
+    for (const key in idChartData) {
+        idChartData[key].div.style.display = 'none';
     }
 
-    document.getElementById(id).style.display = 'block';
+    idChartData[id].div.style.display = 'block';
 }
 
 switchToCanvas(select.value);
