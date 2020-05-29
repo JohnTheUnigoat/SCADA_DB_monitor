@@ -31,7 +31,7 @@ var initVarValuesSql = (function() {
 
     scadaVarIds.forEach(id => {
         res += `(
-            SELECT *
+            SELECT ID, Timestamp, Value
             FROM trends_data
             WHERE ID = ${id} ORDER BY Timestamp DESC LIMIT ${initVarValuesCount}
             ) UNION `;
