@@ -20,6 +20,22 @@ var conn = mysql.createConnection({
     dateStrings: true
 });
 
+app.get('/StaticGraph/:varId/:forTime', function (req, response) {// get request for static chart
+    var id = req.params.varId;
+    var timespan = req.params.forTime;
+
+    let condition = `ID=${id} AND Timestamp >= NOW() - INTERVAL ${timespan} MINUTE`;
+    let sql = `SELECT Timestamp AS time, Value AS value FROM trends_data WHERE ${condition}`;
+
+    conn.query(sql, (err, res) => {
+        if (err) throw err;
+
+        console.log(`${res.length} records loaded`);
+        console.log(res);
+
+        response.json(res);
+    });
+});
 
 var scadaVarIds = [44, 45, 46];
 
