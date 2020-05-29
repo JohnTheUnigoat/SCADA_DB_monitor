@@ -23,8 +23,28 @@ var conn = mysql.createConnection({
 
 
 var scadaVarIds = [44, 45, 46];
-var initVarValuesCount = 30;
 
+
+var varDescriptionsSql = (function () {
+    let idsStr = "";
+    scadaVarIds.forEach(id => {
+        idsStr += `${id}, `;
+    });
+
+    idsStr = idsStr.slice(0, idsStr.lastIndexOf(','));
+
+    return `SELECT ID id, Name name, Description description FROM variables_data WHERE ID IN (${idsStr})`;
+})();
+
+app.get('/asdf', (request, response) => {
+    conn.query(varDescriptionsSql, (err, res) => {
+        if (err) throw err;
+
+        response.json(res);
+    });
+});
+
+var initVarValuesCount = 30;
 
 var initVarValuesSql = (function() {
     let res = ""
