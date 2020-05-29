@@ -6,13 +6,16 @@
   <title>Test</title>
 </head>
 <body>
-  <script src="/socket.io/socket.io.js"></script>
+  <input id="time" type="number" max="720">
+  <button onclick="GetTime()">Log time</button>
   <script>
-    const socket = io();
-
-    socket.on('report', (report) => {
-      console.log(report);
-    })
+    async function GetTime()
+    {
+      var time = document.getElementById("time").value;
+      let response = await fetch(`/StaticGraph/44/${time}`);
+      console.log(await response.json());
+    }
+  
   </script>
 </body>
 </html>

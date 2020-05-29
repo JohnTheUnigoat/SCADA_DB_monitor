@@ -6,6 +6,16 @@ select.addEventListener("change", () => {
     switchToCanvas(select.value);
 });
 
+var staticChartButton = document.getElementById("btn44");
+
+staticChartButton.addEventListener("click", async () => {
+    let time = document.getElementById("time").value;
+    let id =  document.getElementById("chart-select").value;
+    let response = await fetch(`/StaticGraph/${id}/${time}`);
+    let jsonRes = await response.json();
+    fillStaticChart(id, jsonRes);
+});
+
 // create charts for each canvas
 let options = {
     legend: {
@@ -24,39 +34,50 @@ let options = {
 let canvasContainer = document.getElementById("container");
 let canvases = canvasContainer.children;
 for (const div of canvases) {
-    let flag = 0;
+    let flag = false;
     let staticChart;
     let dynamicChart;
-    let indiv = div.children;
+    let indiv = div.getElementsByTagName("canvas");
     for(const canvas of indiv) {
-            let ctx = canvas.getContext('2d');
-            let newChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    datasets: [{
-                        lineTension: 0,
-                        borderColor: 'rgb(255, 0, 0)',
-                        data: []
-                    }]
-                },
-                options: options
-            });
-            if(flag === 0) {
-                dynamicChart = newChart;
-                flag = 1;
-            }
-            else {// flag === 1
-                staticChart = newChart;
-            } 
+        let ctx = canvas.getContext('2d');
+        let newChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: [{
+                    lineTension: 0,
+                    borderColor: 'rgb(255, 0, 0)',
+                    data: []
+                }]
+            },
+            options: options
+        });
+        if(flag == false) {
+            dynamicChart = newChart;
+            flag = true;
         }
-        idChartData[div.id] = {
-            div: div,
-            staticChart: staticChart,
-            staticData: staticChart.data.datasets[0].data,
-            dynamicChart: dynamicChart,
-            dynamicData: dynamicChart.data.datasets[0].data
-        }
+        else {
+            staticChart = newChart;
+        } 
     }
+    idChartData[div.id] = {
+        div: div,
+        staticChart: staticChart,
+        staticData: staticChart.data.datasets[0].data,
+        dynamicChart: dynamicChart,
+        dynamicData: dynamicChart.data.datasets[0].data
+    }
+}
+
+function fillStaticChart(id, report) {
+    let chartData = idChartData[id];
+    chartData.staticData.length = 0;
+    for (const record of report) {
+        let time = moment(record.time);
+        let value = record.value;
+        chartData.staticData.push({t: time, y: value});
+    }
+    chartData.staticChart.update();
+}
 
 function chartReport(report) {// for dynamic chart only
     for (const id in report) {
