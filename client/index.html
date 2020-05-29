@@ -11,15 +11,13 @@
 </head>
 <body>
 
-  <!-- <select id="chart-select">
-    <option value="44" selected>vrRepLevel</option>
-    <option value="45">vrRepTemp</option>
-    <option value="46">vrRepPressure</option>
-  </select> -->
-  <select id="chart-select"></select>
-
-
-  <div id="container"></div>
+  <div id="container">
+    <select id="chart-select"></select>
+    <canvas id="dynamic-chart"></canvas>
+    <input id="static-timeperiod" type="number"> 
+    <button id="load-static-btn">Load chart</button>
+    <canvas id="static-chart"></canvas>
+  </div>
 
   <script src="pageGenerator.js"></script>
   <!-- <script src="chartService.js"></script>
