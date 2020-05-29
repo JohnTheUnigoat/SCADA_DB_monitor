@@ -17,6 +17,8 @@ const chartOptions = {
     }
 };
 
+var select = document.getElementById("chart-select");
+
 var dynamicChart;
 var staticChart;
 
@@ -32,8 +34,6 @@ var staticData = {};
 })();
 
 function generatePage(variableDescriptions) {
-    let select = document.getElementById("chart-select");
-
     variableDescriptions.forEach(varDesc => {
         let id = varDesc.id;
 
