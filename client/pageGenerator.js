@@ -17,8 +17,11 @@ const chartOptions = {
     }
 };
 
-var staticChart;
 var dynamicChart;
+var staticChart;
+
+var dynamicData = {};
+var staticData = {};
 
 (async () => {
     let variableDescriptions = await (await fetch(varialbeDataUrl)).json();
@@ -40,10 +43,17 @@ function generatePage(variableDescriptions) {
         option.innerText = varDesc.name;
         select.appendChild(option);
 
-        // creating charts
-        dynamicChart = createChartForCanvas("dynamic-chart");
-        staticChart = createChartForCanvas("static-chart");
+        // init data arrays
+        dynamicData[id] = [];
+        staticData[id] = [];
     });
+
+    // creating charts
+    dynamicChart = createChartForCanvas("dynamic-chart");
+    staticChart = createChartForCanvas("static-chart");
+
+    dynamicChart.data.datasets[0].data = dynamicData[select.value];
+    staticChart.data.datasets[0].data = staticData[select.value];
 
     select.children[0].setAttribute("selected", "selected");
 }
