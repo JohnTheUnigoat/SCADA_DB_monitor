@@ -7,42 +7,40 @@ select.addEventListener("change", () => {
 });
 
 // create charts for each canvas
-(function() {
-    let canvases = document.getElementsByTagName("canvas");
-    for (let canvas of canvases) {
-        let ctx = canvas.getContext('2d');
-        let newChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                datasets: [{
-                    lineTension: 0,
-                    borderColor: 'rgb(255, 0, 0)',
-                    data: []
-                }]
+let canvases = document.getElementsByTagName("canvas");
+for (let canvas of canvases) {
+    let ctx = canvas.getContext('2d');
+    let newChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            datasets: [{
+                lineTension: 0,
+                borderColor: 'rgb(255, 0, 0)',
+                data: []
+            }]
+        },
+        options: {
+            legend: {
+                display: false
             },
-            options: {
-                legend: {
-                    display: false
-                },
-                tooltips: {
-                    enabled: false
-                },
-                animation: false,
-                scales: {
-                    xAxes: [{
-                        type: 'time',
-                    }],
-                }
+            tooltips: {
+                enabled: false
+            },
+            animation: false,
+            scales: {
+                xAxes: [{
+                    type: 'time',
+                }]
             }
-        });
+        }
+    });
 
-        idChartData[canvas.id] = {
-            chart: newChart,
-            data: newChart.data.datasets[0].data,
-            canvas: canvas
-        };
-    }
-})();
+    idChartData[canvas.id] = {
+        chart: newChart,
+        data: newChart.data.datasets[0].data,
+        canvas: canvas
+    };
+}
 
 function chartReport(report) {
     for (const id in report) {
@@ -64,7 +62,7 @@ function switchToCanvas(id) {
     let canvases = document.getElementsByTagName("canvas");
 
     for (let canvas of canvases) {
-         canvas.style.display = 'none';
+        canvas.style.display = 'none';
     }
 
     document.getElementById(id).style.display = 'block';
