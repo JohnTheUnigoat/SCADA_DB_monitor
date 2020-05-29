@@ -8,7 +8,6 @@ const path = require('path');
 const app = express();
 
 const server = app.listen(3000);
-
 const io = socket(server);
 
 app.use(express.static('client'));
@@ -36,7 +35,7 @@ var varDescriptionsSql = (function () {
     return `SELECT ID id, Name name, Description description FROM variables_data WHERE ID IN (${idsStr})`;
 })();
 
-app.get('/asdf', (request, response) => {
+app.get('/variableData', (request, response) => {
     conn.query(varDescriptionsSql, (err, res) => {
         if (err) throw err;
 
