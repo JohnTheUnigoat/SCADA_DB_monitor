@@ -13,10 +13,16 @@
 
   <div id="container">
     <select id="chart-select"></select>
-    <canvas id="dynamic-chart"></canvas>
-    <input id="static-timeperiod" type="number"> 
-    <button id="load-static-btn">Load chart</button>
-    <canvas id="static-chart"></canvas>
+
+    <div id="dynamic">
+      <canvas id="dynamic-chart"></canvas>
+    </div>
+
+    <div id="static">
+      <input id="static-timeperiod" type="number">
+      <button id="load-static-btn">Load chart</button>
+      <canvas id="static-chart"></canvas>
+    </div>
   </div>
 
   <script src="pageGenerator.js"></script>
