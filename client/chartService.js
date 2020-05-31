@@ -15,6 +15,22 @@ loadStaticChartBtn.addEventListener("click", async () => {
     fillStaticChart(id, jsonRes);
 });
 
+var saveToFieStaticBtn = document.getElementById("saveToFile-static-btn");
+
+saveToFieStaticBtn.addEventListener("click", () =>{
+    let id = select.value;
+
+    let csvString = "Time,Value\n";
+
+    staticData[id].forEach(point => {
+        csvString = csvString.concat(`"${point.t.format("DD-MM-YYYY HH:MM:SS")}","${point.y}"\n`);
+    });
+
+    let fileName = `${id} - ${select.options[select.selectedIndex].text}.csv`;
+
+    download(fileName, csvString);
+});
+
 function fillStaticChart(id, report) {
     let chartData = staticData[id];
     chartData.length = 0;
@@ -70,3 +86,16 @@ socket.on('report', (report) => {
 
     dynamicChart.update();
 });
+
+function download(filename, text) {
+    let a = document.createElement('a');
+    a.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    a.setAttribute('download', filename);
+  
+    a.style.display = 'none';
+    document.body.appendChild(a);
+  
+    a.click();
+  
+    document.body.removeChild(a);
+  }
