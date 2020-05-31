@@ -23,7 +23,7 @@ saveToFieStaticBtn.addEventListener("click", () =>{
     let csvString = "Time,Value\n";
 
     staticData[id].forEach(point => {
-        csvString = csvString.concat(`"${point.t.format("DD-MM-YYYY HH:MM:SS")}","${point.y}"\n`);
+        csvString = csvString + `"${point.t.format("DD/MM/YYYY HH:MM:SS")}","${point.y}"\n`;
     });
 
     let fileName = `${id} - ${select.options[select.selectedIndex].text}.csv`;
@@ -98,4 +98,4 @@ function download(filename, text) {
     a.click();
   
     document.body.removeChild(a);
-  }
+}
