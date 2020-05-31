@@ -15,20 +15,32 @@ loadStaticChartBtn.addEventListener("click", async () => {
     fillStaticChart(id, jsonRes);
 });
 
-var saveToFieStaticBtn = document.getElementById("saveToFile-static-btn");
+var saveToFieStaticBtn = document.getElementById("static-save-file-btn");
 
 saveToFieStaticBtn.addEventListener("click", () =>{
     let id = select.value;
 
-    let csvString = "Time,Value\n";
+    let content = "Time,Value\n";
 
     staticData[id].forEach(point => {
-        csvString = csvString + `"${point.t.format("DD/MM/YYYY HH:MM:SS")}","${point.y}"\n`;
+        content = content + `"${point.t.format("DD/MM/YYYY HH:mm:ss")}","${point.y}"\n`;
     });
 
     let fileName = `${id} - ${select.options[select.selectedIndex].text}.csv`;
 
-    download(fileName, csvString);
+    let blob = new Blob([content], {type: "text/csv"});
+
+    let url = URL.createObjectURL(blob);
+
+    let a = document.createElement('a');
+
+    a.setAttribute('href', url);
+    a.setAttribute('download', fileName);
+
+    document.body.appendChild(a);
+    a.click();
+
+    document.body.removeChild(a);
 });
 
 function fillStaticChart(id, report) {
