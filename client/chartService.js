@@ -60,6 +60,8 @@ function fillStaticChart(id, report) {
 select.addEventListener("change", () => {
     let id = select.value;
     
+    varDescText.textContent = varsDesc[id];
+
     dynamicChart.data.datasets[0].data = dynamicData[id];
     dynamicChart.update();
 

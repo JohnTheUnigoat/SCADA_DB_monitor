@@ -18,6 +18,7 @@ const chartOptions = {
 };
 
 var select = document.getElementById("chart-select");
+var varDescText = document.getElementById("var-description");
 
 var dynamicChart;
 var staticChart;
@@ -25,8 +26,11 @@ var staticChart;
 var dynamicData = {};
 var staticData = {};
 
+var varsDesc = {};
+
 (async () => {
     let varsNameDesc = await (await fetch(varialbesDataUrl)).json();
+    console.log(varsNameDesc);
     generatePage(varsNameDesc);
 })();
 
@@ -43,6 +47,9 @@ function generatePage(varsNameDesc) {
         // init data arrays
         dynamicData[id] = [];
         staticData[id] = [];
+
+        // save variavle descriptions
+        varsDesc[id] = varNameDesc.description;
     });
 
     // creating charts
