@@ -1,4 +1,4 @@
-const varialbeDataUrl = "/variableData";
+const varialbesDataUrl = "/variableData";
 
 const chartType = 'line';
 
@@ -26,21 +26,18 @@ var dynamicData = {};
 var staticData = {};
 
 (async () => {
-    let variableDescriptions = await (await fetch(varialbeDataUrl)).json();
-
-    console.log(variableDescriptions);
-
-    generatePage(variableDescriptions);
+    let varsNameDesc = await (await fetch(varialbesDataUrl)).json();
+    generatePage(varsNameDesc);
 })();
 
-function generatePage(variableDescriptions) {
-    variableDescriptions.forEach(varDesc => {
-        let id = varDesc.id;
+function generatePage(varsNameDesc) {
+    varsNameDesc.forEach(varNameDesc => {
+        let id = varNameDesc.id;
 
         // creating select options
         let option = document.createElement("option");
         option.value = id;
-        option.innerText = varDesc.name;
+        option.innerText = varNameDesc.name;
         select.appendChild(option);
 
         // init data arrays
