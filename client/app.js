@@ -90,10 +90,8 @@ async function generatePage() {
     dynamicChart = createChartForCanvas("dynamic-chart");
     staticChart = createChartForCanvas("static-chart");
 
-    dynamicChart.data.datasets[0].data = dynamicData[select.value];
-    staticChart.data.datasets[0].data = staticData[select.value];
-
-    select.children[0].setAttribute("selected", "selected");
+    select.selectedIndex = 0;
+    onSelectChange();
 }
 
 // creates Chart object for specified canvas id
