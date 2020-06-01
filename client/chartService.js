@@ -15,9 +15,9 @@ loadStaticChartBtn.addEventListener("click", async () => {
     fillStaticChart(id, jsonRes);
 });
 
-var saveToFieStaticBtn = document.getElementById("static-save-file-btn");
+var saveToFileStaticBtn = document.getElementById("static-save-file-btn");
 
-saveToFieStaticBtn.addEventListener("click", () =>{
+saveToFileStaticBtn.addEventListener("click", () =>{
     let id = select.value;
 
     let content = "Time,Value\n";
@@ -37,10 +37,7 @@ saveToFieStaticBtn.addEventListener("click", () =>{
     a.setAttribute('href', url);
     a.setAttribute('download', fileName);
 
-    document.body.appendChild(a);
     a.click();
-
-    document.body.removeChild(a);
 });
 
 function fillStaticChart(id, report) {
