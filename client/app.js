@@ -6,6 +6,14 @@ const staticReportFetchUrl = "/StaticGraph/:id/:time";
 const chartType = 'line';
 
 const chartOptions = {
+    elements: {
+        point: {
+            radius: 0
+        },
+        line: {
+            borderWidth: 1.5
+        }
+    },
     legend: {
         display: false
     },
@@ -15,7 +23,7 @@ const chartOptions = {
     animation: false,
     scales: {
         xAxes: [{
-            type: 'time',
+            type: 'time'
         }]
     }
 };

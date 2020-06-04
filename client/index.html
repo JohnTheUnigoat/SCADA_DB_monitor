@@ -14,16 +14,20 @@
   <div id="container">
     <select id="chart-select"></select>
     <h1 id="var-description"></h1>
+    <div class="chart-container">
+      <div class="chart">
+        <canvas id="dynamic-chart"></canvas>
+      </div>
 
-    <div id="dynamic">
-      <canvas id="dynamic-chart"></canvas>
-    </div>
-
-    <div id="static">
-      <input id="static-timeperiod" type="number">
-      <button id="load-static-btn">Load chart</button>
-      <button id="static-save-file-btn">Save to file</button>
-      <canvas id="static-chart"></canvas>
+      <div class="chart">
+        <canvas id="static-chart"></canvas>
+        <div class="input">
+          <label for="static-timperiod">Time period (minutes):</label>
+          <input id="static-timeperiod" type="number">
+          <button id="load-static-btn">Load chart</button>
+          <button id="static-save-file-btn">Save to file</button>
+        </div>
+      </div>
     </div>
   </div>
 

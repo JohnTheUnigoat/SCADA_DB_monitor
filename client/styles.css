@@ -1,0 +1,22 @@
+:root {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.chart-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.chart {
+    width: 50%;
+}
+
+@media (max-width: 900px) {
+    .chart {
+        width: 100%;
+    }
+}
+
+.input {
+    float: right;
+}
